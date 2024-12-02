@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import Sidebar from "./components/Sidebar";
 import Preview from "./components/Preview";
-import jsPDF from 'jspdf';
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 function App() {
   const [portfolioData, setPortfolioData] = useState({
@@ -16,61 +17,39 @@ function App() {
     },
   });
 
+  const handleDownloadPDF = async () => {
+    const element = document.getElementById("preview-container");
 
+    const canvas = await html2canvas(element, {
+      scale: 2, // Increase quality
+      useCORS: true, // Ensures proper image loading
+    });
 
-const handleDownloadPDF = () => {
-  const doc = new jsPDF();
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(20);
-  doc.text(`${portfolioData.name || 'Your Name'}`, 20, 20);
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(12);
-  doc.text(`${portfolioData.bio || 'Your bio goes here...'}`, 20, 30);
+    const imgData = canvas.toDataURL("image/png");
+    const pdf = new jsPDF("p", "mm", "a4");
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
-  doc.addPage();
-  doc.text('Skills:', 20, 20);
-  portfolioData.skills.forEach((skill, index) => {
-    doc.text(`- ${skill}`, 20, 30 + index * 10);
-  });
-
-  doc.addPage();
-  doc.text('Projects:', 20, 20);
-  portfolioData.projects.forEach((project, index) => {
-    doc.text(
-      `${index + 1}. ${project.name} - ${project.description}`,
-      20,
-      30 + index * 10
-    );
-    if (project.link) {
-      doc.text(`   Link: ${project.link}`, 20, 40 + index * 10);
-    }
-  });
-
-  doc.save('portfolio.pdf');
-};
-
-
+    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+    pdf.save("portfolio.pdf");
+  };
 
   return (
-    <div className="flex h-screen relative">
+    <div className="flex h-screen w-[100vw] relative">
       <Sidebar
         portfolioData={portfolioData}
         setPortfolioData={setPortfolioData}
       />
-
-      <Preview portfolioData={portfolioData} />
+      <div id="preview-container" className="w-[100vw] h-[100vh]">
+        <Preview portfolioData={portfolioData} />
+      </div>
       {portfolioData?.name !== "" && (
-        <div className="absolute bottom-0 right-0 m-8 bg-white rounded-full p-4 flex justify-center items-center shadow-2xl text-white font-bold text-4xl cursor-pointer transition-all duration-200 hover:scale-[1.05] active:scale-[.98]">
-          
-          {Object.keys(portfolioData).some((key) => portfolioData[key]) && (
-  <div className="">
-    <button
-      onClick={handleDownloadPDF}
-      className=""
-    >⬇
-    </button>
-  </div>
-)}
+        <div className="absolute bottom-0 right-0 m-8 border-2 rounded-full p-4 flex justify-center items-center shadow-2xl text-white font-bold text-4xl cursor-pointer transition-all duration-200 hover:scale-[1.05] active:scale-[.98]">
+          <div className="">
+            <button onClick={handleDownloadPDF} className="">
+              ⬇
+            </button>
+          </div>
         </div>
       )}
     </div>

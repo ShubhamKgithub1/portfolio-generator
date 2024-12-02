@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
 const Sidebar = ({ portfolioData, setPortfolioData }) => {
-  // Temporary state for dynamic inputs
   const [newSkill, setNewSkill] = useState("");
   const [newProject, setNewProject] = useState({
     name: "",
@@ -9,13 +8,11 @@ const Sidebar = ({ portfolioData, setPortfolioData }) => {
     link: "",
   });
 
-  // Handle input changes for personal details
   const handleChange = (e) => {
     const { name, value } = e.target;
     setPortfolioData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Add new skill
   const addSkill = () => {
     if (newSkill.trim()) {
       setPortfolioData((prev) => ({
@@ -26,7 +23,6 @@ const Sidebar = ({ portfolioData, setPortfolioData }) => {
     }
   };
 
-  // Add new project
   const addProject = () => {
     if (newProject.name.trim()) {
       setPortfolioData((prev) => ({

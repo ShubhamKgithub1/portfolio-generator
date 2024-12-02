@@ -5,7 +5,7 @@ const Preview = ({ portfolioData }) => {
     portfolioData;
 
   return (
-    <div className="w-2/3 bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 text-white p-8 rounded-lg shadow-lg">
+    <div className="w-[100%] h-[100%] flex flex-col gap-8 justify-start bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 text-white p-8 rounded-lg shadow-lg">
       {/* Personal Details */}
       <div className="text-center mb-8">
         {profilePicture ? (
@@ -21,6 +21,7 @@ const Preview = ({ portfolioData }) => {
         <p className="text-lg">
           {bio || "Write a short bio about yourself here."}
         </p>
+        <div className="bg-white w-[100%] h-1 mt-7"></div>
       </div>
 
       {/* Skills Section */}
@@ -31,7 +32,7 @@ const Preview = ({ portfolioData }) => {
             skills.map((skill, index) => (
               <span
                 key={index}
-                className="bg-white text-purple-700 px-3 py-1 rounded-full text-sm shadow"
+                className="bg-white flex justify-center items-center text-purple-700 px-3 py-1 rounded-full text-sm shadow"
               >
                 {skill}
               </span>
@@ -50,14 +51,14 @@ const Preview = ({ portfolioData }) => {
             projects.map((project, index) => (
               <div
                 key={index}
-                className="bg-white w-[180px] h-[150px] flex flex-col items-start justify-center text-purple-700 p-4 rounded-lg shadow hover:shadow-lg transition-shadow"
+                className="bg-white  flex flex-col items-start justify-center text-purple-700 p-4 rounded-lg shadow hover:shadow-lg transition-shadow"
               >
                 <h3 className="text-xl font-bold">{project.name}</h3>
                 <p className="text-sm">{project.description}</p>
                 {project.link && (
                   <a
                     href={project.link}
-                    className="text-blue-400 underline mt-2 block"
+                    className="text-blue-400 rounded-md mt-2 block"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
